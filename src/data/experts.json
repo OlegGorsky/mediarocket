@@ -1,0 +1,174 @@
+{
+  "experts": [
+    {
+      "id": "expert1",
+      "title": "Олег Горский",
+      "image": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/oleggorsky",
+      "description": "Эксперт по digital-маркетингу и монетизации Telegram-каналов",
+      "benefitLink": "https://t.me/oleggorsky/100",
+      "featured": true
+    },
+    {
+      "id": "expert2",
+      "title": "Михаил Дюжаков",
+      "image": "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/duzhakov",
+      "description": "Специалист по масштабированию бизнеса и личному бренду",
+      "benefitLink": "https://t.me/duzhakov/100",
+      "featured": true
+    },
+    {
+      "id": "expert3",
+      "title": "Анна Петрова",
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/annapetrova",
+      "description": "Эксперт по контент-маркетингу и SMM стратегиям",
+      "benefitLink": "https://t.me/annapetrova/100",
+      "featured": true
+    },
+    {
+      "id": "expert4",
+      "title": "Дмитрий Волков",
+      "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/dmitryvolkov",
+      "description": "Специалист по таргетированной рекламе и аналитике",
+      "benefitLink": "https://t.me/dmitryvolkov/100",
+      "featured": true
+    },
+    {
+      "id": "expert5",
+      "title": "Мария Соколова",
+      "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/mariasokolova",
+      "description": "Эксперт по личному бренду и продюсированию",
+      "benefitLink": "https://t.me/mariasokolova/100",
+      "featured": true
+    },
+    {
+      "id": "expert6",
+      "title": "Александр Иванов",
+      "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/alexanderivanov",
+      "description": "Специалист по видеомаркетингу и YouTube продвижению",
+      "benefitLink": "https://t.me/alexanderivanov/100",
+      "featured": true
+    },
+    {
+      "id": "expert7",
+      "title": "Екатерина Смирнова",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/ekaterinasmirnova",
+      "description": "Эксперт по email-маркетингу и автоворонкам",
+      "benefitLink": "https://t.me/ekaterinasmirnova/100",
+      "featured": true
+    },
+    {
+      "id": "expert8",
+      "title": "Игорь Козлов",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/igorkozlov",
+      "description": "Специалист по SEO и веб-аналитике",
+      "benefitLink": "https://t.me/igorkozlov/100",
+      "featured": true
+    },
+    {
+      "id": "expert9",
+      "title": "Наталья Морозова",
+      "image": "https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/nataliamorozova",
+      "description": "Эксперт по копирайтингу и сторителлингу",
+      "benefitLink": "https://t.me/nataliamorozova/100",
+      "featured": true
+    },
+    {
+      "id": "expert10",
+      "title": "Павел Николаев",
+      "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/pavelnikolaev",
+      "description": "Специалист по performance-маркетингу и CPA",
+      "benefitLink": "https://t.me/pavelnikolaev/100",
+      "featured": true
+    },
+    {
+      "id": "expert11",
+      "title": "Светлана Кузнецова",
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/svetlanakuznetsova",
+      "description": "Эксперт по контент-стратегиям и медиапланированию",
+      "benefitLink": "https://t.me/svetlanakuznetsova/100"
+    },
+    {
+      "id": "expert12",
+      "title": "Артем Белов",
+      "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/artembelov",
+      "description": "Специалист по маркетплейсам и e-commerce",
+      "benefitLink": "https://t.me/artembelov/100"
+    },
+    {
+      "id": "expert13",
+      "title": "Юлия Романова",
+      "image": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/yuliaromanova",
+      "description": "Эксперт по инфлюенс-маркетингу",
+      "benefitLink": "https://t.me/yuliaromanova/100"
+    },
+    {
+      "id": "expert14",
+      "title": "Максим Федоров",
+      "image": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/maximfedorov",
+      "description": "Специалист по digital-стратегиям",
+      "benefitLink": "https://t.me/maximfedorov/100"
+    },
+    {
+      "id": "expert15",
+      "title": "Елена Попова",
+      "image": "https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/elenapopova",
+      "description": "Эксперт по брендингу и PR",
+      "benefitLink": "https://t.me/elenapopova/100"
+    },
+    {
+      "id": "expert16",
+      "title": "Андрей Соловьев",
+      "image": "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/andreysoloviev",
+      "description": "Специалист по веб-аналитике и CRO",
+      "benefitLink": "https://t.me/andreysoloviev/100"
+    },
+    {
+      "id": "expert17",
+      "title": "Ирина Новикова",
+      "image": "https://images.unsplash.com/photo-1557296387-5358ad7997bb?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/irinanovikova",
+      "description": "Эксперт по комьюнити-менеджменту",
+      "benefitLink": "https://t.me/irinanovikova/100"
+    },
+    {
+      "id": "expert18",
+      "title": "Денис Королев",
+      "image": "https://images.unsplash.com/photo-1500048993953-d23a436266cf?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/deniskorolev",
+      "description": "Специалист по монетизации контента",
+      "benefitLink": "https://t.me/deniskorolev/100"
+    },
+    {
+      "id": "expert19",
+      "title": "Татьяна Белова",
+      "image": "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/tatianabelova",
+      "description": "Эксперт по социальным сетям",
+      "benefitLink": "https://t.me/tatianabelova/100"
+    },
+    {
+      "id": "expert20",
+      "title": "Сергей Михайлов",
+      "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/sergeymihailov",
+      "description": "Специалист по digital-продуктам",
+      "benefitLink": "https://t.me/sergeymihailov/100"
+    }
+  ]
+}

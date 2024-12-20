@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #160c30;
+  color: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.bg-custom-dark {
+  background-color: #160c30;
+}
+
+.toast-custom {
+  background-color: rgba(31, 27, 46, 0.9) !important;
+  color: white !important;
+  backdrop-filter: blur(8px);
+  border-radius: 8px !important;
+  padding: 12px 20px !important;
+  font-size: 14px !important;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Prevent text selection during drag */
+.select-none * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Gradient animation */
+.bg-gradient-animate {
+  background: #160c30;
+}

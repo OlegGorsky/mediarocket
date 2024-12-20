@@ -1,0 +1,39 @@
+{
+  "experts": [
+    {
+      "id": "expert1",
+      "title": "Олег Горский",
+      "image": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/oleggorsky",
+      "featured": true
+    },
+    {
+      "id": "expert2",
+      "title": "Михаил Дюжаков",
+      "image": "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/duzhakov",
+      "featured": true
+    },
+    {
+      "id": "expert3",
+      "title": "Анна Петрова",
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/annapetrova",
+      "featured": true
+    },
+    {
+      "id": "expert4",
+      "title": "Дмитрий Волков",
+      "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/dmitryvolkov",
+      "featured": true
+    },
+    {
+      "id": "expert5",
+      "title": "Мария Соколова",
+      "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200",
+      "link": "https://t.me/mariasokolova",
+      "featured": true
+    }
+  ]
+}

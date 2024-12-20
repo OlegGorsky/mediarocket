@@ -1,0 +1,46 @@
+{
+  "slides": [
+    {
+      "id": "slide1",
+      "title": "Запусти свою ракету!",
+      "description": "Начни зарабатывать с нашей командой экспертов",
+      "image": "https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "slide2",
+      "title": "Получай бонусы",
+      "description": "Выполняй задания и получай RocketCoin",
+      "image": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "slide3",
+      "title": "Учись у лучших",
+      "description": "Изучай материалы от топовых экспертов",
+      "image": "https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "slide4",
+      "title": "Развивайся",
+      "description": "Получай новые знания каждый день",
+      "image": "https://images.unsplash.com/photo-1457364887197-9150188c107b?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "slide5",
+      "title": "Будь в команде",
+      "description": "Стань частью сообщества профессионалов",
+      "image": "https://images.unsplash.com/photo-1517976547714-720226b864c1?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "slide6",
+      "title": "Достигай целей",
+      "description": "Ставь цели и достигай их с нами",
+      "image": "https://images.unsplash.com/photo-1451187863213-d1bcbaae3fa3?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "slide7",
+      "title": "Покоряй вершины",
+      "description": "Стань лучшим в своем деле",
+      "image": "https://images.unsplash.com/photo-1518364538800-6bae3c2ea0f2?auto=format&fit=crop&q=80&w=400"
+    }
+  ]
+}
