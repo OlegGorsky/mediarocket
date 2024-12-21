@@ -92,7 +92,7 @@ export const ExpertsPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4 pb-36 bg-gray-900 min-h-screen">
+    <div className="p-4 pb-36 bg-[#160c30] min-h-screen">
       <div className="flex flex-col items-center mb-4">
         <Users2 size={28} className="text-[#6C3CE1] mb-2" />
         <h1 className="text-lg font-bold text-white text-center">

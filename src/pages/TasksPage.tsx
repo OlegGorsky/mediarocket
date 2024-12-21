@@ -46,39 +46,40 @@ const sendToWebhook = async (url, data) => {
 };
 
 // Обработчик ответа API
-export const handleApiResponse = (response) => {
+const handleApiResponse = (response) => {
   console.log('Full API Response:', response);
 
   if (!Array.isArray(response) || response.length === 0) {
     toast.error('Некорректный ответ от сервера');
-    return;
+    return false;
   }
 
   const subscriptionStatus = response[0]?.subscribe;
 
   if (!subscriptionStatus) {
     toast.error('Ответ не содержит статус подписки');
-    return;
+    return false;
   }
 
   switch (subscriptionStatus) {
     case 'yes':
       toast.success('Отлично! Видим подписку. Вам начислено 100 РокетКоинов!');
-      break;
+      return true;
     case 'no':
       toast.error('К сожалению, не видим вашей подписки. Сначала подпишитесь, чтоб получить 100 РокетКоинов.');
-      break;
+      return false;
     case 'unscribe':
       toast.error('Вы уже получили 100 РокетКоинов, но почему-то отписались от ТГ-канала.');
-      break;
+      return false;
     case 'again':
       toast.error('Вы уже получили 100 РокетКоинов за подписку на этот ТГ-канал!');
-      break;
+      return false;
     case 'unknown':
       toast.error('Статус подписки неизвестен. Пожалуйста, попробуйте позже.');
-      break;
+      return false;
     default:
       toast.error('Неизвестный статус подписки.');
+      return false;
   }
 };
 
@@ -95,7 +96,9 @@ export const TasksPage: React.FC = () => {
 
     const channelUsername = channel.link.split('/').pop() || '';
     try {
-      const isSubscribed = await api.checkSubscription(user.id, channelUsername);
+      const response = await api.checkSubscription(user.id, channelUsername);
+      const isSubscribed = handleApiResponse(response);
+
       console.log('Subscription check result:', isSubscribed);
 
       setSubscriptions(prev => ({
@@ -157,7 +160,7 @@ export const TasksPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4 pb-24 bg-gray-900 min-h-screen">
+    <div className="p-4 pb-24 bg-[#160c30] min-h-screen">
       <div className="flex flex-col items-center mb-4">
         <Rocket size={28} className="text-[#6C3CE1] mb-2" />
         <h1 className="text-lg font-bold text-white text-center">
@@ -171,7 +174,7 @@ export const TasksPage: React.FC = () => {
           value={promoCode}
           onChange={(e) => setPromoCode(e.target.value)}
           placeholder="Введите код здесь"
-          className="w-full bg-[#1F1B2E] text-white py-3 px-4 rounded-lg pr-16 focus:outline-none focus:ring-2 focus:ring-[#6C3CE1] placeholder-gray-500"
+          className="w-full bg-[#160c30] text-white py-3 px-4 rounded-lg pr-16 focus:outline-none focus:ring-2 focus:ring-[#6C3CE1] placeholder-gray-500"
           disabled={isLoading}
         />
         <button
@@ -183,7 +186,7 @@ export const TasksPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-[#1F1B2E] rounded-lg p-3 mb-6">
+      <div className="bg-[#160c30] rounded-lg p-3 mb-6">
         <h2 className="text-sm font-medium text-white/80 mb-3 text-center">
           Подпишись на Телеграм-каналы организаторов и канал нашего розыгрыша
         </h2>
@@ -192,7 +195,7 @@ export const TasksPage: React.FC = () => {
             <button
               key={channel.id}
               onClick={() => setSelectedChannel(channel)}
-              className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2 rounded-lg font-medium flex items-center justify-between px-3 transition-colors"
+              className="w-full bg-[#160c30] hover:bg-[#2A2640] text-white py-2 rounded-lg font-medium flex items-center justify-between px-3 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <img
@@ -219,7 +222,7 @@ export const TasksPage: React.FC = () => {
 
       <button
         onClick={handleAddFolder}
-        className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2.5 rounded-lg font-medium flex items-center justify-between px-3 text-sm transition-colors mb-6"
+        className="w-full bg-[#160c30] hover:bg-[#2A2640] text-white py-2.5 rounded-lg font-medium flex items-center justify-between px-3 text-sm transition-colors mb-6"
       >
         <div className="flex items-center gap-2">
           <div className="bg-blue-500 p-1.5 rounded-lg">
@@ -237,7 +240,7 @@ export const TasksPage: React.FC = () => {
 
       <button
         onClick={() => setCurrentTab('experts')}
-        className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2.5 rounded-lg font-medium flex items-center justify-between px-3 text-sm transition-colors"
+        className="w-full bg-[#160c30] hover:bg-[#2A2640] text-white py-2.5 rounded-lg font-medium flex items-center justify-between px-3 text-sm transition-colors"
       >
         <div className="flex items-center gap-2">
           <div className="bg-[#6C3CE1] p-1.5 rounded-lg">
