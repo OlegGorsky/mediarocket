@@ -5,6 +5,7 @@ import { useTelegram } from '../hooks/useTelegram';
 import { api } from '../services/api';
 import { ExpertPanel } from '../components/ExpertPanel';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const channels = [
   {
@@ -33,6 +34,16 @@ const channels = [
   }
 ];
 
+// Функция для отправки данных на вебхук n8n
+const sendToWebhook = async (url, data) => {
+  try {
+    await axios.post(url, data);
+    console.log('Данные успешно отправлены на вебхук');
+  } catch (error) {
+    console.error('Ошибка при отправке данных на вебхук:', error);
+  }
+};
+
 export const TasksPage: React.FC = () => {
   const { setCurrentTab } = useStore();
   const { tg, user } = useTelegram();
@@ -51,6 +62,13 @@ export const TasksPage: React.FC = () => {
       ...prev,
       [channel.id]: isSubscribed
     }));
+
+    // Отправка данных на вебхук для проверки подписки
+    sendToWebhook('https://gorskybase.store/webhook/d2aaceca-d12a-4d22-a30b-907c0f6f097c', {
+      userId: user.id,
+      channelId: channel.id,
+      isSubscribed
+    });
   };
 
   const handleAddFolder = () => {
@@ -66,18 +84,40 @@ export const TasksPage: React.FC = () => {
       if (result.status === 'success') {
         toast.success('Промокод успешно применен!');
         setPromoCode('');
+
+        // Отправка данных на вебхук для промокодов
+        sendToWebhook('https://gorskybase.store/webhook/8ce88456-7ad5-4ea4-9b65-d187c07a4c63', {
+          userId: user.id,
+          promoCode,
+          status: 'success'
+        });
       } else {
         toast.error(result.reason || 'Промокод уже использован или недействителен');
+
+        // Отправка данных на вебхук для промокодов
+        sendToWebhook('https://gorskybase.store/webhook/8ce88456-7ad5-4ea4-9b65-d187c07a4c63', {
+          userId: user.id,
+          promoCode,
+          status: 'failed',
+          reason: result.reason
+        });
       }
     } catch (error) {
       console.error('Error submitting promo code:', error);
+
+      // Отправка данных на вебхук для промокодов
+      sendToWebhook('https://gorskybase.store/webhook/8ce88456-7ad5-4ea4-9b65-d187c07a4c63', {
+        userId: user.id,
+        promoCode,
+        status: 'error'
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="p-4 pb-24">
+    <div className="p-4 pb-24 bg-gray-900 min-h-screen">
       <div className="flex flex-col items-center mb-4">
         <Rocket size={28} className="text-[#6C3CE1] mb-2" />
         <h1 className="text-lg font-bold text-white text-center">

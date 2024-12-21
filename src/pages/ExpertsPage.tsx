@@ -92,7 +92,7 @@ export const ExpertsPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4 pb-24">
+    <div className="p-4 pb-24 bg-gray-900 min-h-screen">
       <div className="flex flex-col items-center mb-4">
         <Users2 size={28} className="text-[#6C3CE1] mb-2" />
         <h1 className="text-lg font-bold text-white text-center">
@@ -105,7 +105,7 @@ export const ExpertsPage: React.FC = () => {
           <button
             key={expert.id}
             onClick={() => setSelectedExpert(expert)}
-            className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2 rounded-lg font-medium flex items-center justify-between px-3 transition-colors relative"
+            className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2 rounded-lg font-medium flex items-center justify-between px-3 transition-colors shadow-md"
           >
             <div className="flex items-center gap-2">
               <img
