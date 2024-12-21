@@ -34,7 +34,6 @@ const channels = [
   }
 ];
 
-// Функция для отправки данных на вебхук n8n
 const sendToWebhook = async (url, data) => {
   try {
     const response = await axios.post(url, data);
@@ -45,7 +44,6 @@ const sendToWebhook = async (url, data) => {
   }
 };
 
-// Обработчик ответа API
 const handleApiResponse = (response) => {
   console.log('Full API Response:', response);
 
@@ -174,7 +172,7 @@ export const TasksPage: React.FC = () => {
           value={promoCode}
           onChange={(e) => setPromoCode(e.target.value)}
           placeholder="Введите код здесь"
-          className="w-full bg-[#160c30] text-white py-3 px-4 rounded-lg pr-16 focus:outline-none focus:ring-2 focus:ring-[#6C3CE1] placeholder-gray-500"
+          className="w-full bg-[#1F1B2E] text-white py-3 px-4 rounded-lg pr-16 focus:outline-none focus:ring-2 focus:ring-[#6C3CE1] placeholder-gray-500"
           disabled={isLoading}
         />
         <button
@@ -186,7 +184,7 @@ export const TasksPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-[#160c30] rounded-lg p-3 mb-6">
+      <div className="bg-[#1F1B2E] rounded-lg p-3 mb-6">
         <h2 className="text-sm font-medium text-white/80 mb-3 text-center">
           Подпишись на Телеграм-каналы организаторов и канал нашего розыгрыша
         </h2>
@@ -195,7 +193,7 @@ export const TasksPage: React.FC = () => {
             <button
               key={channel.id}
               onClick={() => setSelectedChannel(channel)}
-              className="w-full bg-[#160c30] hover:bg-[#2A2640] text-white py-2 rounded-lg font-medium flex items-center justify-between px-3 transition-colors"
+              className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2 rounded-lg font-medium flex items-center justify-between px-3 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <img
@@ -222,7 +220,7 @@ export const TasksPage: React.FC = () => {
 
       <button
         onClick={handleAddFolder}
-        className="w-full bg-[#160c30] hover:bg-[#2A2640] text-white py-2.5 rounded-lg font-medium flex items-center justify-between px-3 text-sm transition-colors mb-6"
+        className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2.5 rounded-lg font-medium flex items-center justify-between px-3 text-sm transition-colors mb-6"
       >
         <div className="flex items-center gap-2">
           <div className="bg-blue-500 p-1.5 rounded-lg">
@@ -240,7 +238,7 @@ export const TasksPage: React.FC = () => {
 
       <button
         onClick={() => setCurrentTab('experts')}
-        className="w-full bg-[#160c30] hover:bg-[#2A2640] text-white py-2.5 rounded-lg font-medium flex items-center justify-between px-3 text-sm transition-colors"
+        className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2.5 rounded-lg font-medium flex items-center justify-between px-3 text-sm transition-colors"
       >
         <div className="flex items-center gap-2">
           <div className="bg-[#6C3CE1] p-1.5 rounded-lg">
