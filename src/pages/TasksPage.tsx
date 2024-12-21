@@ -87,29 +87,25 @@ export const handleApiResponse = (response: SubscriptionResponse[]): void => {
   }
 };
 
+
+
 // Компонент для отображения панели экспертов
 const ExpertPanel = ({ expert, isOpen, onClose, onSubscriptionCheck }) => {
   const { user, tg } = useTelegram();
 
-  const handleSubscriptionCheck = async () => {
-    if (!user?.id) {
-      toast.error('Ошибка проверки подписки');
-      return;
-    }
-
-    try {
-      const channelUsername = expert.link.split('/').pop() || '';
-      const response = await api.checkSubscription(user.id, channelUsername);
-      handleApiResponse(response);
-    } catch (error) {
-      console.error('Error checking subscription:', error);
-      toast.error('Произошла ошибка при проверке подписки');
-    }
-  };
-
-  if (!isOpen) return null;
-
-  return (
+  const handleSubscriptionCheck = async (expert: Expert) => {
+      if (!user?.id) return;
+  
+      try {
+        const channelUsername = expert.link.split('/').pop() || '';
+        const response = await telegramService.checkChannelSubscription(user.id, channelUsername);
+        handleApiResponse(response);
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
+  
+    return (
     <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50">
       <div className="bg-[#160c30] rounded-t-2xl w-full p-6 relative pb-12">
         <button onClick={onClose} className="absolute right-4 top-4 text-white/70 hover:text-white">
