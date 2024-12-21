@@ -40,8 +40,9 @@ export const TasksPage: React.FC = () => {
     queryFn: async () => {
       const results = await Promise.all(
         channels.map(async (channel) => {
-          const subscriptionStatus = await api.checkSubscription(user?.id || 0, channel.id);
-          
+          const response = await api.checkSubscription(user?.id || 0, channel.id);
+          const subscriptionStatus = response.subscribe; // Извлекаем статус подписки из ответа
+
           switch (subscriptionStatus) {
             case 'yes':
               toast.success(`Вы подписаны на ${channel.title}. Вам начислено 500 RC!`);
@@ -65,7 +66,7 @@ export const TasksPage: React.FC = () => {
       return Object.fromEntries(results);
     },
     enabled: !!user?.id,
-    refetchInterval: 5000, // Refresh every 5 seconds
+    refetchInterval: 5000, // Обновление каждые 5 секунд
   });
 
   const handleAddFolder = () => {

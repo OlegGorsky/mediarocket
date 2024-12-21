@@ -28,7 +28,9 @@ export const ExpertPanel: React.FC<ExpertPanelProps> = ({
 
     try {
       const channelUsername = expert.link.split('/').pop() || '';
-      const subscriptionStatus = await api.checkSubscription(user.id, channelUsername);
+      const response = await api.checkSubscription(user.id, channelUsername);
+
+      const subscriptionStatus = response.subscribe; // Извлекаем статус подписки из ответа
 
       switch (subscriptionStatus) {
         case 'yes':
