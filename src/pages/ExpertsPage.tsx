@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Users2, ChevronRight, CheckCircle2 } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
 import { useTelegram } from '../hooks/useTelegram';
-import { api } from '../services/api';
 import { telegramService } from '../services/telegramService';
 import { ExpertPanel } from '../components/ExpertPanel';
 import expertsData from '../data/experts.json';
