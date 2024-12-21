@@ -30,7 +30,7 @@ export const ExpertPanel: React.FC<ExpertPanelProps> = ({
       const channelUsername = expert.link.split('/').pop() || '';
       const response = await api.checkSubscription(user.id, channelUsername);
 
-      console.log('API Response:', response); // Логирование ответа
+      console.log('Full API Response:', response); // Полное логирование ответа
 
       if (typeof response !== 'string') {
         toast.error('Некорректный ответ от сервера');
