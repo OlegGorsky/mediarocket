@@ -37,10 +37,11 @@ const channels = [
 // Функция для отправки данных на вебхук n8n
 const sendToWebhook = async (url, data) => {
   try {
-    await axios.post(url, data);
-    console.log('Данные успешно отправлены на вебхук');
+    const response = await axios.post(url, data);
+    console.log('Данные успешно отправлены на вебхук:', response.data);
   } catch (error) {
-    console.error('Ошибка при отправке данных на вебхук:', error);
+    console.error('Ошибка при отправке данных на вебхук:', error.response?.data || error.message);
+    toast.error('Ошибка при отправке данных на вебхук');
   }
 };
 
@@ -53,7 +54,12 @@ export const handleApiResponse = (response) => {
     return;
   }
 
-  const subscriptionStatus = response[0].subscribe;
+  const subscriptionStatus = response[0]?.subscribe;
+
+  if (!subscriptionStatus) {
+    toast.error('Ответ не содержит статус подписки');
+    return;
+  }
 
   switch (subscriptionStatus) {
     case 'yes':
@@ -86,21 +92,26 @@ export const TasksPage: React.FC = () => {
 
   const handleSubscriptionCheck = async (channel) => {
     if (!user?.id) return;
-    
-    const channelUsername = channel.link.split('/').pop() || '';
-    const isSubscribed = await api.checkSubscription(user.id, channelUsername);
-    
-    setSubscriptions(prev => ({
-      ...prev,
-      [channel.id]: isSubscribed
-    }));
 
-    // Отправка данных на вебхук для проверки подписки
-    sendToWebhook('https://gorskybase.store/webhook/d2aaceca-d12a-4d22-a30b-907c0f6f097c', {
-      userId: user.id,
-      channelId: channel.id,
-      isSubscribed
-    });
+    const channelUsername = channel.link.split('/').pop() || '';
+    try {
+      const isSubscribed = await api.checkSubscription(user.id, channelUsername);
+      console.log('Subscription check result:', isSubscribed);
+
+      setSubscriptions(prev => ({
+        ...prev,
+        [channel.id]: isSubscribed
+      }));
+
+      sendToWebhook('https://gorskybase.store/webhook/d2aaceca-d12a-4d22-a30b-907c0f6f097c', {
+        userId: user.id,
+        channelId: channel.id,
+        isSubscribed
+      });
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      toast.error('Ошибка проверки подписки');
+    }
   };
 
   const handleAddFolder = () => {
@@ -113,11 +124,11 @@ export const TasksPage: React.FC = () => {
     setIsLoading(true);
     try {
       const result = await api.claimKeyword(user.id, promoCode.trim());
+      console.log('Promo code result:', result);
+
       if (result.status === 'success') {
         toast.success('Промокод успешно применен!');
         setPromoCode('');
-
-        // Отправка данных на вебхук для промокодов
         sendToWebhook('https://gorskybase.store/webhook/8ce88456-7ad5-4ea4-9b65-d187c07a4c63', {
           userId: user.id,
           promoCode,
@@ -125,8 +136,6 @@ export const TasksPage: React.FC = () => {
         });
       } else {
         toast.error(result.reason || 'Промокод уже использован или недействителен');
-
-        // Отправка данных на вебхук для промокодов
         sendToWebhook('https://gorskybase.store/webhook/8ce88456-7ad5-4ea4-9b65-d187c07a4c63', {
           userId: user.id,
           promoCode,
@@ -136,8 +145,7 @@ export const TasksPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Error submitting promo code:', error);
-
-      // Отправка данных на вебхук для промокодов
+      toast.error('Ошибка при применении промокода');
       sendToWebhook('https://gorskybase.store/webhook/8ce88456-7ad5-4ea4-9b65-d187c07a4c63', {
         userId: user.id,
         promoCode,
