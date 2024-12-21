@@ -30,6 +30,8 @@ export const ExpertPanel: React.FC<ExpertPanelProps> = ({
       const channelUsername = expert.link.split('/').pop() || '';
       const response = await api.checkSubscription(user.id, channelUsername);
 
+      console.log('Subscription response:', response); // Логирование ответа
+
       const subscriptionStatus = response.subscribe; // Извлекаем статус подписки из ответа
 
       switch (subscriptionStatus) {
@@ -50,6 +52,7 @@ export const ExpertPanel: React.FC<ExpertPanelProps> = ({
           toast.error('Неизвестный статус подписки.');
       }
     } catch (error) {
+      console.error('Error checking subscription:', error); // Логирование ошибки
       toast.error('Произошла ошибка при проверке подписки');
     }
   };
