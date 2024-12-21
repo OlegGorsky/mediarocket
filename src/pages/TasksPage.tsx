@@ -44,6 +44,38 @@ const sendToWebhook = async (url, data) => {
   }
 };
 
+// Обработчик ответа API
+export const handleApiResponse = (response) => {
+  console.log('Full API Response:', response);
+
+  if (!Array.isArray(response) || response.length === 0) {
+    toast.error('Некорректный ответ от сервера');
+    return;
+  }
+
+  const subscriptionStatus = response[0].subscribe;
+
+  switch (subscriptionStatus) {
+    case 'yes':
+      toast.success('Отлично! Видим подписку. Вам начислено 100 РокетКоинов!');
+      break;
+    case 'no':
+      toast.error('К сожалению, не видим вашей подписки. Сначала подпишитесь, чтоб получить 100 РокетКоинов.');
+      break;
+    case 'unscribe':
+      toast.error('Вы уже получили 100 РокетКоинов, но почему-то отписались от ТГ-канала.');
+      break;
+    case 'again':
+      toast.error('Вы уже получили 100 РокетКоинов за подписку на этот ТГ-канал!');
+      break;
+    case 'unknown':
+      toast.error('Статус подписки неизвестен. Пожалуйста, попробуйте позже.');
+      break;
+    default:
+      toast.error('Неизвестный статус подписки.');
+  }
+};
+
 export const TasksPage: React.FC = () => {
   const { setCurrentTab } = useStore();
   const { tg, user } = useTelegram();
@@ -52,7 +84,7 @@ export const TasksPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [subscriptions, setSubscriptions] = useState<Record<string, boolean>>({});
 
-  const handleSubscriptionCheck = async (channel: any) => {
+  const handleSubscriptionCheck = async (channel) => {
     if (!user?.id) return;
     
     const channelUsername = channel.link.split('/').pop() || '';
