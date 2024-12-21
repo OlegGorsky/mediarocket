@@ -92,7 +92,7 @@ export const ExpertsPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4 pb-24 bg-gray-900 min-h-screen">
+    <div className="p-4 pb-36 bg-gray-900 min-h-screen">
       <div className="flex flex-col items-center mb-4">
         <Users2 size={28} className="text-[#6C3CE1] mb-2" />
         <h1 className="text-lg font-bold text-white text-center">
@@ -138,7 +138,13 @@ export const ExpertsPage: React.FC = () => {
 
       {selectedExpert && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end">
-          <div className="bg-[#1F1B2E] p-4 rounded-t-lg shadow-lg max-w-md w-full text-white">
+          <div className="bg-[#1F1B2E] p-4 rounded-t-lg shadow-lg max-w-md w-full text-white relative">
+            <button
+              onClick={() => setSelectedExpert(null)}
+              className="absolute top-2 right-2 text-red-500"
+            >
+              <X size={24} />
+            </button>
             <div className="flex flex-col items-center mb-4">
               <img
                 src={selectedExpert.image}
@@ -161,13 +167,10 @@ export const ExpertsPage: React.FC = () => {
               Проверить подписку
             </button>
             <button
-              onClick={() => alert('Польза от эксперта')}
-              className="bg-[#4A238F] text-white py-2 px-4 rounded w-full mb-2"
+              onClick={() => window.open(selectedExpert.benefitLink, '_blank')}
+              className="bg-[#4A238F] text-white py-2 px-4 rounded w-full mb-8"
             >
               Польза от эксперта
-            </button>
-            <button onClick={() => setSelectedExpert(null)} className="text-red-500 mt-2">
-              <X size={24} />
             </button>
           </div>
         </div>
