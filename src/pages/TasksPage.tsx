@@ -6,6 +6,12 @@ import { api } from '../services/api';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
+// Тип для ответа API
+interface SubscriptionResponse {
+  subscribe: string;
+}
+
+// Данные каналов
 const channels = [
   {
     id: 'gorskytalk',
@@ -15,35 +21,22 @@ const channels = [
     description: 'Эксперт по digital-маркетингу и монетизации Telegram-каналов',
     benefitLink: 'https://t.me/gorskytalk/100'
   },
-  {
-    id: 'mikeorda',
-    title: 'Михаил Дюжаков',
-    image: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&q=80&w=200',
-    link: 'https://t.me/mikeorda',
-    description: 'Специалист по масштабированию бизнеса и личному бренду',
-    benefitLink: 'https://t.me/mikeorda/100'
-  },
-  {
-    id: 'mediaraketa',
-    title: 'Медиаракета',
-    image: 'https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?auto=format&fit=crop&q=80&w=200',
-    link: 'https://t.me/mediaraketa',
-    description: 'Официальный канал проекта Медиаракета',
-    benefitLink: 'https://t.me/mediaraketa/100'
-  }
+  // другие каналы...
 ];
 
-const sendToWebhook = async (url, data) => {
+// Отправка данных на вебхук
+const sendToWebhook = async (url: string, data: object) => {
   try {
     const response = await axios.post(url, data);
     console.log('Данные успешно отправлены на вебхук:', response.data);
   } catch (error) {
-    console.error('Ошибка при отправке данных на вебхук:', error.response?.data || error.message);
+    console.error('Ошибка при отправке данных на вебхук:', error);
     toast.error('Ошибка при отправке данных на вебхук');
   }
 };
 
-const handleApiResponse = (response) => {
+// Обработка ответа API
+export const handleApiResponse = (response: SubscriptionResponse[]): boolean => {
   console.log('Full API Response:', response);
 
   if (!Array.isArray(response) || response.length === 0) {
@@ -80,6 +73,7 @@ const handleApiResponse = (response) => {
   }
 };
 
+// Компонент для отображения панели экспертов
 const ExpertPanel = ({ expert, isOpen, onClose, onSubscriptionCheck }) => {
   const { user, tg } = useTelegram();
 
@@ -92,7 +86,7 @@ const ExpertPanel = ({ expert, isOpen, onClose, onSubscriptionCheck }) => {
     try {
       const channelUsername = expert.link.split('/').pop() || '';
       const response = await api.checkSubscription(user.id, channelUsername);
-      handleApiResponse(response, onSubscriptionCheck);
+      handleApiResponse(response);
     } catch (error) {
       console.error('Error checking subscription:', error);
       toast.error('Произошла ошибка при проверке подписки');
@@ -104,44 +98,21 @@ const ExpertPanel = ({ expert, isOpen, onClose, onSubscriptionCheck }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50">
       <div className="bg-[#160c30] rounded-t-2xl w-full p-6 relative pb-12">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 text-white/70 hover:text-white"
-        >
+        <button onClick={onClose} className="absolute right-4 top-4 text-white/70 hover:text-white">
           <X size={20} />
         </button>
-        
         <div className="flex flex-col items-center text-center">
-          <img
-            src={expert.image}
-            alt={expert.title}
-            className="w-20 h-20 rounded-full object-cover mb-4"
-          />
+          <img src={expert.image} alt={expert.title} className="w-20 h-20 rounded-full object-cover mb-4" />
           <h3 className="text-xl font-bold text-white mb-2">{expert.title}</h3>
           <p className="text-gray-400 text-sm mb-6">{expert.description}</p>
-          
           <div className="space-y-3 w-full">
-            <a
-              href={expert.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full bg-[#6C3CE1] text-white py-2.5 rounded-lg font-medium text-center"
-            >
+            <a href={expert.link} target="_blank" rel="noopener noreferrer" className="block w-full bg-[#6C3CE1] text-white py-2.5 rounded-lg font-medium text-center">
               ТГ-канал эксперта
             </a>
-            <button
-              onClick={handleSubscriptionCheck}
-              className="w-full bg-[#6C3CE1]/20 text-white py-2.5 rounded-lg font-medium"
-            >
+            <button onClick={handleSubscriptionCheck} className="w-full bg-[#6C3CE1]/20 text-white py-2.5 rounded-lg font-medium">
               Проверить подписку
             </button>
-            <a
-              href={expert.benefitLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full bg-[#6C3CE1]/20 text-white py-2.5 rounded-lg font-medium text-center"
-              onClick={() => tg.openTelegramLink(expert.benefitLink)}
-            >
+            <a href={expert.benefitLink} target="_blank" rel="noopener noreferrer" className="block w-full bg-[#6C3CE1]/20 text-white py-2.5 rounded-lg font-medium text-center">
               Польза от эксперта
             </a>
           </div>
@@ -151,6 +122,7 @@ const ExpertPanel = ({ expert, isOpen, onClose, onSubscriptionCheck }) => {
   );
 };
 
+// Главная страница заданий
 export const TasksPage: React.FC = () => {
   const { setCurrentTab } = useStore();
   const { tg, user } = useTelegram();
@@ -166,8 +138,6 @@ export const TasksPage: React.FC = () => {
     try {
       const response = await api.checkSubscription(user.id, channelUsername);
       const isSubscribed = handleApiResponse(response);
-
-      console.log('Subscription check result:', isSubscribed);
 
       setSubscriptions(prev => ({
         ...prev,
@@ -195,8 +165,6 @@ export const TasksPage: React.FC = () => {
     setIsLoading(true);
     try {
       const result = await api.claimKeyword(user.id, promoCode.trim());
-      console.log('Promo code result:', result);
-
       if (result.status === 'success') {
         toast.success('Промокод успешно применен!');
         setPromoCode('');
@@ -266,11 +234,7 @@ export const TasksPage: React.FC = () => {
               className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2 rounded-lg font-medium flex items-center justify-between px-3 transition-colors"
             >
               <div className="flex items-center gap-2">
-                <img
-                  src={channel.image}
-                  alt={channel.title}
-                  className="w-8 h-8 rounded-full object-cover"
-                />
+                <img src={channel.image} alt={channel.title} className="w-8 h-8 rounded-full object-cover" />
                 <div className="text-left">
                   <div className="text-sm">{channel.title}</div>
                   <div className="text-xs text-gray-400">
