@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { Expert } from '../types';
 import { useTelegram } from '../hooks/useTelegram';
 import { api } from '../services/api';
-import toast from 'react-hot-toast';
+import { handleApiResponse } from '../utils/apiResponseHandler'; // Убедитесь, что путь правильный
 
 interface ExpertPanelProps {
   expert: Expert;
