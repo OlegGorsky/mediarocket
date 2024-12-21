@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 
-export const handleApiResponse = (response: any, onSubscriptionCheck: () => void) => {
+export const handleApiResponse = (response: any, onSubscriptionCheck: () => void): void => {
   console.log('Full API Response:', response);
 
   if (!Array.isArray(response) || response.length === 0) {
