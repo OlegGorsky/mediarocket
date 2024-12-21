@@ -36,40 +36,34 @@ const sendToWebhook = async (url: string, data: object) => {
 };
 
 // Обработка ответа API
-export const handleApiResponse = (response: SubscriptionResponse[]): boolean => {
+export const handleApiResponse = (response: SubscriptionResponse[]): void => {
   console.log('Full API Response:', response);
 
   if (!Array.isArray(response) || response.length === 0) {
     toast.error('Некорректный ответ от сервера');
-    return false;
+    return;
   }
 
-  const subscriptionStatus = response[0]?.subscribe;
-
-  if (!subscriptionStatus) {
-    toast.error('Ответ не содержит статус подписки');
-    return false;
-  }
+  const subscriptionStatus = response[0].subscribe;
 
   switch (subscriptionStatus) {
     case 'yes':
       toast.success('Отлично! Видим подписку. Вам начислено 100 РокетКоинов!');
-      return true;
+      break;
     case 'no':
       toast.error('К сожалению, не видим вашей подписки. Сначала подпишитесь, чтоб получить 100 РокетКоинов.');
-      return false;
+      break;
     case 'unscribe':
       toast.error('Вы уже получили 100 РокетКоинов, но почему-то отписались от ТГ-канала.');
-      return false;
+      break;
     case 'again':
       toast.error('Вы уже получили 100 РокетКоинов за подписку на этот ТГ-канал!');
-      return false;
+      break;
     case 'unknown':
       toast.error('Статус подписки неизвестен. Пожалуйста, попробуйте позже.');
-      return false;
+      break;
     default:
       toast.error('Неизвестный статус подписки.');
-      return false;
   }
 };
 
