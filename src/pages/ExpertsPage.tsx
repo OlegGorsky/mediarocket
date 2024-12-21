@@ -137,15 +137,15 @@ export const ExpertsPage: React.FC = () => {
       </div>
 
       {selectedExpert && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end z-50">
           <div className="bg-[#1F1B2E] p-4 rounded-t-lg shadow-lg max-w-md w-full text-white relative">
             <button
               onClick={() => setSelectedExpert(null)}
-              className="absolute top-2 right-2 text-red-500"
+              className="absolute top-2 right-2 text-white"
             >
               <X size={24} />
             </button>
-            <div className="flex flex-col items-center mb-4">
+            <div className="flex flex-col items-center mb-6 mt-4">
               <img
                 src={selectedExpert.image}
                 alt={selectedExpert.title}
