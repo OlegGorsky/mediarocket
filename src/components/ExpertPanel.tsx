@@ -32,12 +32,14 @@ export const ExpertPanel: React.FC<ExpertPanelProps> = ({
 
       console.log('Full API Response:', response); // Полное логирование ответа
 
-      if (typeof response !== 'string') {
+      // Проверяем, является ли ответ массивом и содержит ли он элементы
+      if (!Array.isArray(response) || response.length === 0) {
         toast.error('Некорректный ответ от сервера');
         return;
       }
 
-      const subscriptionStatus = response;
+      // Предполагаем, что нужный статус находится в первом элементе массива
+      const subscriptionStatus = response[0];
 
       switch (subscriptionStatus) {
         case 'yes':
