@@ -21,13 +21,12 @@ export const RatingPage: React.FC = () => {
     enabled: !!currentUser?.id,
     staleTime: 0,
     cacheTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: 'always',
   });
 
-  // Sort users by points in descending order
   const sortedUsers = React.useMemo(() => {
-    return [...users].sort((a, b) => parseInt(b.points) - parseInt(a.points));
+    return users.sort((a, b) => parseInt(b.points) - parseInt(a.points));
   }, [users]);
 
   if (isLoading) {

@@ -6,6 +6,7 @@ import { useStore } from '../store/useStore';
 import { useTelegram } from '../hooks/useTelegram';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../services/api';
+import toast from 'react-hot-toast';
 
 const channels = [
   {
@@ -39,8 +40,26 @@ export const TasksPage: React.FC = () => {
     queryFn: async () => {
       const results = await Promise.all(
         channels.map(async (channel) => {
-          const isSubscribed = await api.checkSubscription(user?.id || 0, channel.id);
-          return [channel.id, isSubscribed];
+          const subscriptionStatus = await api.checkSubscription(user?.id || 0, channel.id);
+          
+          switch (subscriptionStatus) {
+            case 'yes':
+              toast.success(`Вы подписаны на ${channel.title}. Вам начислено 500 RC!`);
+              break;
+            case 'no':
+              toast.error(`Вы не подписаны на ${channel.title}. Подпишитесь, чтобы получить 500 RC.`);
+              break;
+            case 'unscribe':
+              toast.error(`Вы отписались от ${channel.title}, но уже получили 500 RC.`);
+              break;
+            case 'again':
+              toast.error(`Вы уже получили 500 RC за подписку на ${channel.title}.`);
+              break;
+            default:
+              toast.error('Неизвестный статус подписки.');
+          }
+
+          return [channel.id, subscriptionStatus === 'yes'];
         })
       );
       return Object.fromEntries(results);

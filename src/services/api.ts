@@ -39,16 +39,16 @@ export const api = {
     }
   },
 
-  async checkSubscription(userId: number, channelUsername: string): Promise<boolean> {
+  async checkSubscription(userId: number, channelUsername: string): Promise<string> {
     try {
       const response = await apiClient.post(WEBHOOKS.CHECK_SUBSCRIPTION, {
         user_id: userId,
         channel_username: channelUsername
       });
-      return response.data.is_subscribed || false;
+      return response.data.subscription_status || 'unknown';
     } catch (error) {
       console.error('Error checking subscription:', error);
-      return false;
+      return 'error';
     }
   },
 

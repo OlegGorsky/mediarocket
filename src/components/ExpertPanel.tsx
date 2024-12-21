@@ -28,13 +28,24 @@ export const ExpertPanel: React.FC<ExpertPanelProps> = ({
 
     try {
       const channelUsername = expert.link.split('/').pop() || '';
-      const isSubscribed = await api.checkSubscription(user.id, channelUsername);
+      const subscriptionStatus = await api.checkSubscription(user.id, channelUsername);
 
-      if (isSubscribed) {
-        toast.success('Подписка подтверждена!');
-        onSubscriptionCheck();
-      } else {
-        toast.error('Ты не подписан! Сначала подпишись.');
+      switch (subscriptionStatus) {
+        case 'yes':
+          toast.success('Отлично! Видим подписку. Вам начислено 100 РокетКоинов!');
+          onSubscriptionCheck();
+          break;
+        case 'no':
+          toast.error('К сожалению, не видим вашей подписки. Сначала подпишитесь, чтоб получить 100 РокетКоинов.');
+          break;
+        case 'unscribe':
+          toast.error('Вы уже получили 100 РокетКоинов, но почему-то отписались от ТГ-канала.');
+          break;
+        case 'again':
+          toast.error('Вы уже получили 100 РокетКоинов за подписку на этот ТГ-канал!');
+          break;
+        default:
+          toast.error('Неизвестный статус подписки.');
       }
     } catch (error) {
       toast.error('Произошла ошибка при проверке подписки');

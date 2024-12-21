@@ -9,42 +9,26 @@ interface RatingCardProps {
 }
 
 export const RatingCard: React.FC<RatingCardProps> = ({ user, index, isCurrentUser }) => {
-  const getPositionStyle = (index: number) => {
-    switch (index) {
-      case 0:
-        return 'bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border-yellow-500';
-      case 1:
-        return 'bg-gradient-to-r from-gray-300/20 to-gray-400/20 border-gray-400';
-      case 2:
-        return 'bg-gradient-to-r from-amber-700/20 to-amber-800/20 border-amber-700';
-      default:
-        return 'bg-[#1F1B2E]';
-    }
-  };
+  const positionStyles = [
+    'bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border-yellow-500',
+    'bg-gradient-to-r from-gray-300/20 to-gray-400/20 border-gray-400',
+    'bg-gradient-to-r from-amber-700/20 to-amber-800/20 border-amber-700',
+    'bg-[#1F1B2E]'
+  ];
 
-  const getPositionIcon = (index: number) => {
-    switch (index) {
-      case 0:
-        return '👑';
-      case 1:
-        return '🥈';
-      case 2:
-        return '🥉';
-      default:
-        return index + 1;
-    }
-  };
+  const positionIcons = ['👑', '🥈', '🥉'];
 
-  const isTopThree = index < 3;
+  const positionStyle = index < 3 ? positionStyles[index] : positionStyles[3];
+  const positionIcon = index < 3 ? positionIcons[index] : index + 1;
 
   return (
     <div
       className={`flex items-center gap-4 p-4 rounded-lg border ${
-        isCurrentUser ? 'border-[#6C3CE1]' : isTopThree ? 'border' : 'border-transparent'
-      } ${getPositionStyle(index)}`}
+        isCurrentUser ? 'border-[#6C3CE1]' : index < 3 ? 'border' : 'border-transparent'
+      } ${positionStyle}`}
     >
       <div className="text-lg font-bold text-white w-8 text-center">
-        {getPositionIcon(index)}
+        {positionIcon}
       </div>
       {user.avatar ? (
         <img
