@@ -24,16 +24,36 @@ const channels = [
   // другие каналы...
 ];
 
-// Отправка данных на вебхук
-const sendToWebhook = async (url: string, data: object) => {
-  try {
-    const response = await axios.post(url, data);
-    console.log('Данные успешно отправлены на вебхук:', response.data);
-  } catch (error) {
-    console.error('Ошибка при отправке данных на вебхук:', error);
-    toast.error('Ошибка при отправке данных на вебхук');
-  }
+// Конфигурация API-клиента
+const apiClient = axios.create({
+  baseURL: 'https://gorskybase.store',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// URL вебхука
+const WEBHOOKS = {
+  CHECK_SUBSCRIPTION: '/webhook/d2aaceca-d12a-4d22-a30b-907c0f6f097c',
 };
+
+// Сервис для проверки подписки
+  const telegramService = {
+  async checkChannelSubscription(userId: number, channelUsername: string): Promise<SubscriptionResponse> {
+    try {
+      const response = await apiClient.post<SubscriptionResponse[]>(WEBHOOKS.CHECK_SUBSCRIPTION, {
+        user_id: userId,
+        channel_username: channelUsername,
+      });
+
+      console.log('Full API Response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      throw error;
+    }
+    }
+  };
 
 // Обработка ответа API
 export const handleApiResponse = (response: SubscriptionResponse[]): void => {
