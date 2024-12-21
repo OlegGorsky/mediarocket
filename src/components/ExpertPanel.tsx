@@ -32,12 +32,12 @@ export const ExpertPanel: React.FC<ExpertPanelProps> = ({
 
       console.log('API Response:', response); // Логирование ответа
 
-      if (!response || typeof response.subscribe !== 'string') {
+      if (typeof response !== 'string') {
         toast.error('Некорректный ответ от сервера');
         return;
       }
 
-      const subscriptionStatus = response.subscribe;
+      const subscriptionStatus = response;
 
       switch (subscriptionStatus) {
         case 'yes':

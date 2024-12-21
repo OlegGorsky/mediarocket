@@ -13,17 +13,21 @@ export const ExpertsPage: React.FC = () => {
 
   const handleSubscriptionCheck = async (expert: Expert) => {
     if (!user?.id) return;
-    
-    const channelUsername = expert.link.split('/').pop() || '';
-    const isSubscribed = await telegramService.checkChannelSubscription(
-      user.id,
-      channelUsername
-    );
-    
-    setSubscriptions(prev => ({
-      ...prev,
-      [expert.id]: isSubscribed
-    }));
+
+    try {
+      const channelUsername = expert.link.split('/').pop() || '';
+      const isSubscribed = await telegramService.checkChannelSubscription(
+        user.id,
+        channelUsername
+      );
+
+      setSubscriptions(prev => ({
+        ...prev,
+        [expert.id]: isSubscribed
+      }));
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+    }
   };
 
   return (
@@ -71,12 +75,14 @@ export const ExpertsPage: React.FC = () => {
         ))}
       </div>
 
-      <ExpertPanel
-        expert={selectedExpert!}
-        isOpen={!!selectedExpert}
-        onClose={() => setSelectedExpert(null)}
-        onSubscriptionCheck={() => selectedExpert && handleSubscriptionCheck(selectedExpert)}
-      />
+      {selectedExpert && (
+        <ExpertPanel
+          expert={selectedExpert}
+          isOpen={!!selectedExpert}
+          onClose={() => setSelectedExpert(null)}
+          onSubscriptionCheck={() => handleSubscriptionCheck(selectedExpert)}
+        />
+      )}
     </div>
   );
 };
