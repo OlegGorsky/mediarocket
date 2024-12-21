@@ -1,10 +1,78 @@
 import React, { useState } from 'react';
 import { Users2, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
-import { telegramService } from '../services/telegramService';
-import { ExpertPanel } from '../components/ExpertPanel';
 import expertsData from '../data/experts.json';
 import type { Expert } from '../types';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+
+// Интерфейс для ответа API
+interface SubscriptionResponse {
+  subscribe: string;
+}
+
+// Конфигурация API-клиента
+const apiClient = axios.create({
+  baseURL: 'https://gorskybase.store',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// URL вебхука
+const WEBHOOKS = {
+  CHECK_SUBSCRIPTION: '/webhook/d2aaceca-d12a-4d22-a30b-907c0f6f097c',
+};
+
+// Сервис для проверки подписки
+const telegramService = {
+  async checkChannelSubscription(userId: number, channelUsername: string): Promise<SubscriptionResponse> {
+    try {
+      const response = await apiClient.post<SubscriptionResponse[]>(WEBHOOKS.CHECK_SUBSCRIPTION, {
+        user_id: userId,
+        channel_username: channelUsername,
+      });
+
+      console.log('Full API Response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      throw error;
+    }
+  }
+};
+
+// Обработчик ответа API
+export const handleApiResponse = (response: SubscriptionResponse[]): void => {
+  console.log('Full API Response:', response);
+
+  if (!Array.isArray(response) || response.length === 0) {
+    toast.error('Некорректный ответ от сервера');
+    return;
+  }
+
+  const subscriptionStatus = response[0].subscribe;
+
+  switch (subscriptionStatus) {
+    case 'yes':
+      toast.success('Отлично! Видим подписку. Вам начислено 100 РокетКоинов!');
+      break;
+    case 'no':
+      toast.error('К сожалению, не видим вашей подписки. Сначала подпишитесь, чтоб получить 100 РокетКоинов.');
+      break;
+    case 'unscribe':
+      toast.error('Вы уже получили 100 РокетКоинов, но почему-то отписались от ТГ-канала.');
+      break;
+    case 'again':
+      toast.error('Вы уже получили 100 РокетКоинов за подписку на этот ТГ-канал!');
+      break;
+    case 'unknown':
+      toast.error('Статус подписки неизвестен. Пожалуйста, попробуйте позже.');
+      break;
+    default:
+      toast.error('Неизвестный статус подписки.');
+  }
+};
 
 export const ExpertsPage: React.FC = () => {
   const { user } = useTelegram();
@@ -16,15 +84,8 @@ export const ExpertsPage: React.FC = () => {
 
     try {
       const channelUsername = expert.link.split('/').pop() || '';
-      const isSubscribed = await telegramService.checkChannelSubscription(
-        user.id,
-        channelUsername
-      );
-
-      setSubscriptions(prev => ({
-        ...prev,
-        [expert.id]: isSubscribed
-      }));
+      const response = await telegramService.checkChannelSubscription(user.id, channelUsername);
+      handleApiResponse(response);
     } catch (error) {
       console.error('Error checking subscription:', error);
     }
@@ -76,12 +137,43 @@ export const ExpertsPage: React.FC = () => {
       </div>
 
       {selectedExpert && (
-        <ExpertPanel
-          expert={selectedExpert}
-          isOpen={!!selectedExpert}
-          onClose={() => setSelectedExpert(null)}
-          onSubscriptionCheck={() => handleSubscriptionCheck(selectedExpert)}
-        />
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-[#1F1B2E] p-4 rounded-lg shadow-lg max-w-md w-full text-white">
+            <div className="flex items-center mb-4">
+              <img
+                src={selectedExpert.image}
+                alt={selectedExpert.title}
+                className="w-16 h-16 rounded-full object-cover mr-4"
+              />
+              <h2 className="text-lg font-bold">{selectedExpert.title}</h2>
+            </div>
+            <p className="mb-4">{selectedExpert.description}</p>
+            <button
+              onClick={() => window.open(selectedExpert.link, '_blank')}
+              className="bg-purple-600 text-white py-2 px-4 rounded w-full mb-2"
+            >
+              ТГ-канал эксперта
+            </button>
+            <button
+              onClick={() => handleSubscriptionCheck(selectedExpert)}
+              className="bg-blue-500 text-white py-2 px-4 rounded w-full mb-2"
+            >
+              Проверить подписку
+            </button>
+            <button
+              onClick={() => alert('Польза от эксперта')}
+              className="bg-green-500 text-white py-2 px-4 rounded w-full mb-2"
+            >
+              Польза от эксперта
+            </button>
+            <button
+              onClick={() => setSelectedExpert(null)}
+              className="text-red-500 w-full"
+            >
+              Закрыть
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
