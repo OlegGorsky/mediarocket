@@ -1,89 +1,156 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import { Expert } from '../types';
+import React, { useState } from 'react';
+import { Users2, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
-import { api } from '../services/api';
-import { handleApiResponse } from '../utils/apiResponseHandler'; // Убедитесь, что путь правильный
+import { ExpertPanel } from '../components/ExpertPanel';
+import expertsData from '../data/experts.json';
+import type { Expert } from '../types';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-interface ExpertPanelProps {
-  expert: Expert;
-  isOpen: boolean;
-  onClose: () => void;
-  onSubscriptionCheck: () => void;
+// Интерфейс для ответа API
+interface SubscriptionResponse {
+  subscribe: string;
 }
 
-export const ExpertPanel: React.FC<ExpertPanelProps> = ({
-  expert,
-  isOpen,
-  onClose,
-  onSubscriptionCheck
-}) => {
-  const { user, tg } = useTelegram();
+// Конфигурация API-клиента
+const apiClient = axios.create({
+  baseURL: 'https://gorskybase.store',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-  const handleSubscriptionCheck = async () => {
-    if (!user?.id) {
-      toast.error('Ошибка проверки подписки');
-      return;
+// URL вебхука
+const WEBHOOKS = {
+  CHECK_SUBSCRIPTION: '/webhook/d2aaceca-d12a-4d22-a30b-907c0f6f097c',
+};
+
+// Сервис для проверки подписки
+const telegramService = {
+  async checkChannelSubscription(userId: number, channelUsername: string): Promise<SubscriptionResponse> {
+    try {
+      const response = await apiClient.post<SubscriptionResponse[]>(WEBHOOKS.CHECK_SUBSCRIPTION, {
+        user_id: userId,
+        channel_username: channelUsername,
+      });
+
+      console.log('Full API Response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      throw error;
     }
+  }
+};
+
+// Обработчик ответа API
+export const handleApiResponse = (response: SubscriptionResponse[], onSubscriptionCheck: () => void): void => {
+  console.log('Full API Response:', response);
+
+  if (!Array.isArray(response) || response.length === 0) {
+    toast.error('Некорректный ответ от сервера');
+    return;
+  }
+
+  const subscriptionStatus = response[0].subscribe;
+
+  switch (subscriptionStatus) {
+    case 'yes':
+      toast.success('Отлично! Видим подписку. Вам начислено 100 РокетКоинов!');
+      onSubscriptionCheck();
+      break;
+    case 'no':
+      toast.error('К сожалению, не видим вашей подписки. Сначала подпишитесь, чтоб получить 100 РокетКоинов.');
+      break;
+    case 'unscribe':
+      toast.error('Вы уже получили 100 РокетКоинов, но почему-то отписались от ТГ-канала.');
+      break;
+    case 'again':
+      toast.error('Вы уже получили 100 РокетКоинов за подписку на этот ТГ-канал!');
+      break;
+    case 'unknown':
+      toast.error('Статус подписки неизвестен. Пожалуйста, попробуйте позже.');
+      break;
+    default:
+      toast.error('Неизвестный статус подписки.');
+  }
+};
+
+export const ExpertsPage: React.FC = () => {
+  const { user } = useTelegram();
+  const [selectedExpert, setSelectedExpert] = useState<Expert | null>(null);
+  const [subscriptions, setSubscriptions] = useState<Record<string, boolean>>({});
+
+  const handleSubscriptionCheck = async (expert: Expert) => {
+    if (!user?.id) return;
 
     try {
       const channelUsername = expert.link.split('/').pop() || '';
-      const response = await api.checkSubscription(user.id, channelUsername);
-      handleApiResponse(response, onSubscriptionCheck);
+      const response = await telegramService.checkChannelSubscription(user.id, channelUsername);
+      handleApiResponse(response, () => {
+        setSubscriptions(prev => ({
+          ...prev,
+          [expert.id]: true
+        }));
+      });
     } catch (error) {
       console.error('Error checking subscription:', error);
-      toast.error('Произошла ошибка при проверке подписки');
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50">
-      <div className="bg-[#160c30] rounded-t-2xl w-full p-6 relative pb-12">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 text-white/70 hover:text-white"
-        >
-          <X size={20} />
-        </button>
-        
-        <div className="flex flex-col items-center text-center">
-          <img
-            src={expert.image}
-            alt={expert.title}
-            className="w-20 h-20 rounded-full object-cover mb-4"
-          />
-          <h3 className="text-xl font-bold text-white mb-2">{expert.title}</h3>
-          <p className="text-gray-400 text-sm mb-6">{expert.description}</p>
-          
-          <div className="space-y-3 w-full">
-            <a
-              href={expert.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full bg-[#6C3CE1] text-white py-2.5 rounded-lg font-medium text-center"
-            >
-              ТГ-канал эксперта
-            </a>
-            <button
-              onClick={handleSubscriptionCheck}
-              className="w-full bg-[#6C3CE1]/20 text-white py-2.5 rounded-lg font-medium"
-            >
-              Проверить подписку
-            </button>
-            <a
-              href={expert.benefitLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full bg-[#6C3CE1]/20 text-white py-2.5 rounded-lg font-medium text-center"
-              onClick={() => tg.openTelegramLink(expert.benefitLink)}
-            >
-              Польза от эксперта
-            </a>
-          </div>
-        </div>
+    <div className="p-4 pb-24">
+      <div className="flex flex-col items-center mb-4">
+        <Users2 size={28} className="text-[#6C3CE1] mb-2" />
+        <h1 className="text-lg font-bold text-white text-center">
+          Эксперты Медиаракеты!
+        </h1>
       </div>
+
+      <div className="space-y-2">
+        {expertsData.experts.map((expert) => (
+          <button
+            key={expert.id}
+            onClick={() => setSelectedExpert(expert)}
+            className="w-full bg-[#1F1B2E] hover:bg-[#2A2640] text-white py-2 rounded-lg font-medium flex items-center justify-between px-3 transition-colors relative"
+          >
+            <div className="flex items-center gap-2">
+              <img
+                src={expert.image}
+                alt={expert.title}
+                className="w-8 h-8 rounded-full object-cover"
+              />
+              <div className="text-left">
+                <div className="text-sm flex items-center gap-2">
+                  {expert.title}
+                  {expert.featured && (
+                    <span className="text-xs bg-[#6C3CE1] px-2 py-0.5 rounded-full">
+                      Топ
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs text-gray-400">
+                  {subscriptions[expert.id] ? '+50 RC' : 'Подписаться'}
+                </div>
+              </div>
+            </div>
+            {subscriptions[expert.id] ? (
+              <CheckCircle2 size={18} className="text-green-500" />
+            ) : (
+              <ChevronRight size={18} className="text-gray-400" />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {selectedExpert && (
+        <ExpertPanel
+          expert={selectedExpert}
+          isOpen={!!selectedExpert}
+          onClose={() => setSelectedExpert(null)}
+          onSubscriptionCheck={() => handleSubscriptionCheck(selectedExpert)}
+        />
+      )}
     </div>
   );
 };
