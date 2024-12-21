@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users2, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Users2, ChevronRight, CheckCircle2, X } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
 import expertsData from '../data/experts.json';
 import type { Expert } from '../types';
@@ -137,40 +137,39 @@ export const ExpertsPage: React.FC = () => {
       </div>
 
       {selectedExpert && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-[#1F1B2E] p-4 rounded-lg shadow-lg max-w-md w-full text-white">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end">
+          <div className="bg-[#1F1B2E] p-4 rounded-t-lg shadow-lg max-w-md w-full text-white">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold">{selectedExpert.title}</h2>
+              <button onClick={() => setSelectedExpert(null)} className="text-red-500">
+                <X size={24} />
+              </button>
+            </div>
             <div className="flex items-center mb-4">
               <img
                 src={selectedExpert.image}
                 alt={selectedExpert.title}
                 className="w-16 h-16 rounded-full object-cover mr-4"
               />
-              <h2 className="text-lg font-bold">{selectedExpert.title}</h2>
+              <p>{selectedExpert.description}</p>
             </div>
-            <p className="mb-4">{selectedExpert.description}</p>
             <button
               onClick={() => window.open(selectedExpert.link, '_blank')}
-              className="bg-purple-600 text-white py-2 px-4 rounded w-full mb-2"
+              className="bg-[#6C3CE1] text-white py-2 px-4 rounded w-full mb-2"
             >
               ТГ-канал эксперта
             </button>
             <button
               onClick={() => handleSubscriptionCheck(selectedExpert)}
-              className="bg-blue-500 text-white py-2 px-4 rounded w-full mb-2"
+              className="bg-[#5A2FB0] text-white py-2 px-4 rounded w-full mb-2"
             >
               Проверить подписку
             </button>
             <button
               onClick={() => alert('Польза от эксперта')}
-              className="bg-green-500 text-white py-2 px-4 rounded w-full mb-2"
+              className="bg-[#4A238F] text-white py-2 px-4 rounded w-full mb-2"
             >
               Польза от эксперта
-            </button>
-            <button
-              onClick={() => setSelectedExpert(null)}
-              className="text-red-500 w-full"
-            >
-              Закрыть
             </button>
           </div>
         </div>
