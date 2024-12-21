@@ -55,6 +55,9 @@ export const ExpertPanel: React.FC<ExpertPanelProps> = ({
         case 'again':
           toast.error('Вы уже получили 100 РокетКоинов за подписку на этот ТГ-канал!');
           break;
+        case 'unknown':
+          toast.error('Статус подписки неизвестен. Пожалуйста, попробуйте позже.');
+          break;
         default:
           toast.error('Неизвестный статус подписки.');
       }
