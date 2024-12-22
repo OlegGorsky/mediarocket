@@ -38,7 +38,7 @@ const WEBHOOKS = {
 };
 
 // Сервис для проверки подписки
-  const telegramService = {
+const telegramService = {
   async checkChannelSubscription(userId: number, channelUsername: string): Promise<SubscriptionResponse> {
     try {
       const response = await apiClient.post<SubscriptionResponse[]>(WEBHOOKS.CHECK_SUBSCRIPTION, {
@@ -52,8 +52,8 @@ const WEBHOOKS = {
       console.error('Error checking subscription:', error);
       throw error;
     }
-    }
-  };
+  }
+};
 
 // Обработка ответа API
 export const handleApiResponse = (response: SubscriptionResponse[]): void => {
@@ -87,25 +87,31 @@ export const handleApiResponse = (response: SubscriptionResponse[]): void => {
   }
 };
 
-
-
 // Компонент для отображения панели экспертов
-const ExpertPanel = ({ expert, isOpen, onClose, onSubscriptionCheck }) => {
-  const { user, tg } = useTelegram();
+const ExpertPanel = ({ expert, isOpen, onClose }) => {
+  const { user } = useTelegram();
 
-  const handleSubscriptionCheck = async (expert: Expert) => {
-      if (!user?.id) return;
-  
-      try {
-        const channelUsername = expert.link.split('/').pop() || '';
-        const response = await telegramService.checkChannelSubscription(user.id, channelUsername);
-        handleApiResponse(response);
-      } catch (error) {
-        console.error('Error checking subscription:', error);
+  const handleSubscriptionCheck = async () => {
+    if (!user?.id) return;
+
+    try {
+      const channelUsername = expert.link ? expert.link.split('/').pop() : '';
+      if (!channelUsername) {
+        toast.error('Некорректная ссылка на канал');
+        return;
       }
-    };
-  
-    return (
+
+      const response = await telegramService.checkChannelSubscription(user.id, channelUsername);
+      handleApiResponse(response);
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      toast.error('Ошибка проверки подписки');
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
     <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50">
       <div className="bg-[#160c30] rounded-t-2xl w-full p-6 relative pb-12">
         <button onClick={onClose} className="absolute right-4 top-4 text-white/70 hover:text-white">
@@ -144,7 +150,12 @@ export const TasksPage: React.FC = () => {
   const handleSubscriptionCheck = async (channel) => {
     if (!user?.id) return;
 
-    const channelUsername = channel.link.split('/').pop() || '';
+    const channelUsername = channel.link ? channel.link.split('/').pop() : '';
+    if (!channelUsername) {
+      toast.error('Некорректная ссылка на канал');
+      return;
+    }
+
     try {
       const response = await api.checkSubscription(user.id, channelUsername);
       const isSubscribed = handleApiResponse(response);
@@ -303,7 +314,6 @@ export const TasksPage: React.FC = () => {
           expert={selectedChannel}
           isOpen={!!selectedChannel}
           onClose={() => setSelectedChannel(null)}
-          onSubscriptionCheck={() => handleSubscriptionCheck(selectedChannel)}
         />
       )}
     </div>
