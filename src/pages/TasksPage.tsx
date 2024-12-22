@@ -21,7 +21,22 @@ const channels = [
     description: 'Эксперт по digital-маркетингу и монетизации Telegram-каналов',
     benefitLink: 'https://t.me/gorskytalk/100'
   },
-  // другие каналы...
+  {
+    id: 'mikeorda',
+    title: 'Михаил Дюжаков',
+    image: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&q=80&w=200',
+    link: 'https://t.me/mikeorda',
+    description: 'Специалист по масштабированию бизнеса и личному бренду',
+    benefitLink: 'https://t.me/mikeorda/100'
+  },
+  {
+    id: 'mediaraketa',
+    title: 'Медиаракета',
+    image: 'https://images.unsplash.com/photo-1636819488524-1f019c4e1c44?auto=format&fit=crop&q=80&w=200',
+    link: 'https://t.me/mediaraketa',
+    description: 'Официальный канал проекта Медиаракета',
+    benefitLink: 'https://t.me/mediaraketa/100'
+  }
 ];
 
 // Конфигурация API-клиента
